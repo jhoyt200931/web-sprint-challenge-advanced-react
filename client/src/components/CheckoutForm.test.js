@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, fireEvent, getByLabelText } from "@testing-library/react";
+import { screen, act, render, fireEvent, getByLabelText } from "@testing-library/react";
 import CheckoutForm from "./CheckoutForm";
 import App from "../App"
 
@@ -11,29 +11,28 @@ test("form header renders", () => {
 
 test("form shows success message on submit with form details", () => {
     render(<CheckoutForm />);
-    const firstNameInput = getByLabelText(/First Name:/i);
+    const firstNameInput = screen.getByLabelText(/First Name:/i);
     const firstNameValue = "Bruce";
 
-    const lastNameInput = getByLabelText(/Last Name:/i);
+    const lastNameInput = screen.getByLabelText(/Last Name:/i);
     const lastNameValue = "Wayne";
 
-    const addressInput = getByLabelText(/Address:/i);
+    const addressInput = screen.getByLabelText(/Address:/i);
     const addressValue = "1 Wayne Manor";
 
-    const cityInput = getByLabelText(/City:/i);
+    const cityInput = screen.getByLabelText(/City:/i);
     const cityValue = "Gotham";
 
-    const stateInput = getByLabelText(/State:/i);
+    const stateInput = screen.getByLabelText(/State:/i);
     const stateValue = "NY";
 
-    const zipInput = getByLabelText(/Zip:/i);
+    const zipInput = screen.getByLabelText(/Zip:/i);
     const zipValue = "11111";
 
-    const button = getByTestId(/checkout/i);
+    const button = screen.getByTestId(/checkout/i);
 
-    const successMessage = getByTestId(/successMessage/i);
-
-    await(act(async(), () => {
+    
+    act( () => {
         fireEvent.change(firstNameInput, {target: {value: firstNameValue}});
         fireEvent.change(lastNameInput, {target: {value: lastNameValue}});
         fireEvent.change(addressInput, {target: {value: addressValue}});
@@ -41,8 +40,9 @@ test("form shows success message on submit with form details", () => {
         fireEvent.change(stateInput, {target: {value: stateValue}});
         fireEvent.change(zipInput, {target: {value: zipValue}});
         fireEvent.click(button);
-    }));
-
-    expect(successMessage).toHaveValue(true);
-
+    });
+    const successMessage = screen.getByTestId(/successMessage/i);
+    expect(successMessage).toBeInTheDocument();
+        
+        
 });
